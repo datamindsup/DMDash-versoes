@@ -1,0 +1,909 @@
+{
+    "dashboard":  {
+                      "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
+                      "versao":  "0.26.320.1828"
+                  },
+    "versao":  1,
+    "tela":  {
+                 "largura":  1200,
+                 "altura":  540,
+                 "grelha":  5,
+                 "margem":  2,
+                 "ajuste":  "janela"
+             },
+    "tema":  {
+                 "fundo":  "#D9D9D9",
+                 "blocos":  "#FFFFFF",
+                 "cabecalho":  "#FFFFFF",
+                 "texto":  "#202124",
+                 "borda":  "#E0E0E0",
+                 "sombra":  true,
+                 "raio":  4,
+                 "negrito":  false,
+                 "fonte":  "Roboto"
+             },
+    "titulo":  "DM BI - Análise de Relatórios",
+    "descricao":  "Página 2 do relatório DM BI do Looker Studio (convertida à mão). Fonte: vista materializada ltable.",
+    "exportar":  false,
+    "filtrosAtivos":  "blocos",
+    "periodo":  {
+                    "desde":  {
+                                  "unidade":  "meses",
+                                  "valor":  -3
+                              },
+                    "ate":  {
+                                "unidade":  "dias",
+                                "valor":  0
+                            }
+                },
+    "parametros":  [
+                       {
+                           "nome":  "Filtro1",
+                           "titulo":  "Filtro",
+                           "tipo":  "texto",
+                           "valor":  ""
+                       },
+                       {
+                           "nome":  "ParCli",
+                           "titulo":  "N.º cliente (0 = todos)",
+                           "tipo":  "numero",
+                           "valor":  0,
+                           "oculto":  true
+                       }
+                   ],
+    "fontes":  [
+                   {
+                       "nome":  "relatorios",
+                       "sql":  "-- Fonte \"relatorios\" dos dashboards DM BI no DMDash (PostgreSQL/Supabase), a partir da vista materializada ltable.\n-- Uma linha por linha de relatório, como no Looker Studio. Os campos calculados do Looker estão aqui (ver DM-BI.md).\n-- Parâmetros do dashboard: @Desde, @Ate (datas da análise) e @ParCli (número; 0 = todos os clientes).\n-- O texto do \"Filtro\" (lin.filtro1…4) não vai no SQL: é o filtro de cada tabela, com o parâmetro ?Filtro.\nSELECT\n    l.\"lin.rdata\"::date                                   AS data,          -- dia do relatório (lin.rdata)\n    l.\"cab.relid\"                                         AS relid,         -- para a ligação ao GoFormz\n    l.\"cab.relnum\"                                        AS relnum,\n    l.\"lin.linnum\"                                        AS linha,\n    l.\"cab.relmodname\"                                    AS modulo,        -- Mod (DM, DMRP, …)\n    l.\"lin.relmodname\"                                    AS modulolinha,\n    l.\"cab.relstatus\"                                     AS estado,\n    l.\"cab.tecnico\"                                       AS tecnico,\n    CASE l.\"cab.tecnico\"\n        WHEN \u0027Sérgio Fernandes\u0027 THEN \u0027SF\u0027 WHEN \u0027Ricardo Stuart\u0027 THEN \u0027RS\u0027 WHEN \u0027José Rossas\u0027 THEN \u0027JR\u0027\n        WHEN \u0027José Augusto Dias\u0027 THEN \u0027AD\u0027 WHEN \u0027José António Lima\u0027 THEN \u0027JL\u0027 WHEN \u0027Pedro Costa\u0027 THEN \u0027PC\u0027\n        WHEN \u0027Sara Vilasboas\u0027 THEN \u0027SV\u0027 WHEN \u0027Andreia Sobral\u0027 THEN \u0027AS\u0027 WHEN \u0027Victor Afonso\u0027 THEN \u0027VF\u0027\n        WHEN \u0027Consultor\u0027 THEN \u0027CS\u0027 WHEN \u0027Consultor Contabilístico\u0027 THEN \u0027CC\u0027 WHEN \u0027Andreia Lima\u0027 THEN \u0027AL\u0027\n        WHEN \u0027Jorge Torres\u0027 THEN \u0027JT\u0027 WHEN \u0027Vera Alves\u0027 THEN \u0027VA\u0027 WHEN \u0027Domingos Costa\u0027 THEN \u0027DC\u0027\n        WHEN \u0027Carolina Pereira\u0027 THEN \u0027CP\u0027 WHEN \u0027Catarina Barros\u0027 THEN \u0027CB\u0027 WHEN \u0027Bruna Sampaio\u0027 THEN \u0027BS\u0027\n    END                                                   AS tc,            -- cab.tc\n    l.\"cab.tipo\"                                          AS tipo,\n    l.\"cab.classificacao\"                                 AS classificacao,\n    l.\"cab.clinum\"                                        AS clinum,\n    l.\"cab.clinome\"                                       AS cliente,\n    l.\"cab.assunto\"                                       AS assunto,\n    CASE WHEN l.\"cab.tday\" \u003e 5 THEN \u0027DD\u0027 ELSE \u0027DT\u0027 END    AS diatipo,       -- cab.diatipo (DD = descanso, DT = trabalho)\n    l.\"cab.cmdata\"::date                                  AS datafecho,     -- Data Fecho (completeddate)\n    CASE WHEN EXTRACT(DOW FROM l.\"cab.rdata\") \u003c 6         -- cab.difdatas (como no Looker: só o sábado dá 0)\n         THEN (l.\"cab.cmdata\"::date - l.\"cab.rdata\"::date)\n              - ROUND((l.\"cab.cmdata\"::date - l.\"cab.rdata\"::date) / 7.0) * 2\n         ELSE 0 END                                       AS difdatas,\n    l.\"cab.dwdays\"                                        AS diasfecho,     -- dias úteis até ao fecho (sem feriados)\n    l.\"cab.dsdays\"                                        AS diascorridos,  -- dias seguidos até ao fecho\n    CASE WHEN l.\"cab.dwdays\" \u003c 4 THEN \u0027Até 3 Dias\u0027 ELSE \u0027Mais de 3 Dias\u0027 END AS difdiastrb,  -- cab.dwdayso\n    l.\"cab.mwdays\"                                        AS diasuteismes,\n    EXTRACT(YEAR FROM l.\"lin.rdata\")::int * 100 + EXTRACT(MONTH FROM l.\"lin.rdata\")::int AS anomes, -- 202611 (tot.mwdays: só com um mês)\n    l.\"lin.rdata\"::date::text || \u0027 \u0027 || l.\"cab.tecnico\"   AS diatecnico,    -- dia + técnico (tot.tlintectmp, tot.mediadttp)\n    left(l.\"cab.totalhours\", length(l.\"cab.totalhours\") - 3) AS thours,     -- cab.thours (\"HH:MM\")\n    l.\"lin.intervencao\"                                   AS intervencao,   -- ASSISTENCIA_TEC, VIAGEM, FERIAS, …\n    CASE l.\"lin.intervencao\"                              -- lin.ilin (Tipo)\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN \u0027ATE\u0027 WHEN \u0027ASSISTENCIA_CON\u0027 THEN \u0027ACT\u0027 WHEN \u0027ASSISTENCIA_TOC\u0027 THEN \u0027ACO\u0027\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN \u0027ERR\u0027 WHEN \u0027VIAGEM\u0027 THEN \u0027VIA\u0027 WHEN \u0027FORMACAO\u0027 THEN \u0027FOR\u0027 WHEN \u0027COMERCIAL\u0027 THEN \u0027COM\u0027\n        WHEN \u0027INTERNO\u0027 THEN \u0027INT\u0027 WHEN \u0027FALTAS\u0027 THEN \u0027FLT\u0027 WHEN \u0027FERIAS\u0027 THEN \u0027FER\u0027 WHEN \u0027RGP - RGPD\u0027 THEN \u0027RGP\u0027\n        WHEN \u0027COMPLEMENTAR\u0027 THEN \u0027CMP\u0027 ELSE l.\"lin.intervencao\" END AS ilin,\n    CASE l.\"lin.intervencao\"                              -- nome com o código, pela ordem do Looker (ver ordemintervencao)\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN \u0027Assistência Técnica (ATE)\u0027 WHEN \u0027ASSISTENCIA_CON\u0027 THEN \u0027Assistência Contrato (ACT)\u0027\n        WHEN \u0027ASSISTENCIA_TOC\u0027 THEN \u0027Assistência TOC (ACO)\u0027 WHEN \u0027COMERCIAL\u0027 THEN \u0027Comercial (COM)\u0027\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN \u0027Correção Erro (ERR)\u0027 WHEN \u0027FORMACAO\u0027 THEN \u0027Formação (FOR)\u0027 WHEN \u0027INTERNO\u0027 THEN \u0027Interno (INT)\u0027\n        WHEN \u0027VIAGEM\u0027 THEN \u0027Viagem (VIA)\u0027 WHEN \u0027FALTAS\u0027 THEN \u0027Faltas (FLT)\u0027 WHEN \u0027FERIAS\u0027 THEN \u0027Férias (FER)\u0027\n        WHEN \u0027RGP - RGPD\u0027 THEN \u0027RGP - RGPD (RGP)\u0027 WHEN \u0027COMPLEMENTAR\u0027 THEN \u0027Complementar (CMP)\u0027 ELSE l.\"lin.intervencao\" END AS tipointervencao,\n    CASE l.\"lin.intervencao\"\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN 1 WHEN \u0027ASSISTENCIA_CON\u0027 THEN 2 WHEN \u0027ASSISTENCIA_TOC\u0027 THEN 3 WHEN \u0027COMERCIAL\u0027 THEN 4\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN 5 WHEN \u0027FORMACAO\u0027 THEN 6 WHEN \u0027INTERNO\u0027 THEN 7 WHEN \u0027VIAGEM\u0027 THEN 8 WHEN \u0027FALTAS\u0027 THEN 9\n        WHEN \u0027FERIAS\u0027 THEN 10 WHEN \u0027RGP - RGPD\u0027 THEN 11 WHEN \u0027COMPLEMENTAR\u0027 THEN 12 ELSE 99 END AS ordemintervencao,\n    l.\"lin.intlin\"                                        AS descricao,     -- lin.intlin (Descrição)\n    left(l.\"lin.hinilin\"::text, 5)                        AS ini,\n    left(l.\"lin.hfimlin\"::text, 5)                        AS fim,           -- lin.fim\n    l.\"lin.faclin\"                                        AS fac,\n    substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60  AS tempo,         -- lin.tlin: segundos da linha (formato \"duracao\")\n    CASE WHEN l.\"lin.intervencao\" = \u0027ASSISTENCIA_CON\u0027 THEN substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60 END AS tempoact,   -- lin.tlinact (só ACT)\n    CASE WHEN l.\"lin.intervencao\" = \u0027ASSISTENCIA_TEC\u0027 THEN substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60 END AS tempoate,   -- lin.tlinate (só ATE)\n    CASE WHEN l.\"lin.intervencao\" = \u0027VIAGEM\u0027 THEN l.\"cab.rdata\"::date END AS dataviagem, -- tot.cddesloca2 (contar = dias com viagem)\n    CASE WHEN l.\"lin.intervencao\" = \u0027VIAGEM\u0027\n         THEN l.\"cab.rdata\"::date::text || \u0027 \u0027 || l.\"cab.clinum\" END AS deslocacao,  -- tot.cddesloca (contar = deslocações dia+cliente)\n    l.\"cli.clinhorascontrato\"                             AS horascontrato, -- para lin.tlinactper (% das horas do contrato)\n    l.\"cli.clindeslocacontrato\"                           AS deslocacoescontrato,\n    l.\"tot.tdtotal\"                                       AS tempodia,      -- total do técnico nesse dia, em segundos\n    to_char(l.\"lin.rdata\"::date, \u0027YYYYMMDD\u0027)::bigint * 1000000\n      + l.\"cab.relnum\"::bigint                            AS recente        -- dia + RelNum: o máximo é o relatório mais recente (Assunto)\nFROM ltable AS l\nWHERE l.\"lin.rdata\"::date BETWEEN @Desde AND @Ate\n  AND (@ParCli = 0 OR l.\"cab.clinum\" = @ParCli)                             -- cab.clinum.filtrourl",
+                       "soColunasUsadas":  true,
+                       "colunas":  [
+                                       "data",
+                                       "relid",
+                                       "relnum",
+                                       "linha",
+                                       "modulo",
+                                       "modulolinha",
+                                       "tecnico",
+                                       "tc",
+                                       "cliente",
+                                       "assunto",
+                                       "diatipo",
+                                       "datafecho",
+                                       "difdatas",
+                                       "diascorridos",
+                                       "difdiastrb",
+                                       "diasuteismes",
+                                       "anomes",
+                                       "diatecnico",
+                                       "ilin",
+                                       "tipointervencao",
+                                       "descricao",
+                                       "ini",
+                                       "fim",
+                                       "fac",
+                                       "tempo",
+                                       "tempodia"
+                                   ],
+                       "filtro":  "Contains(Lower(Concat([relnum], [cliente], [assunto], [tecnico], [tc], [modulo], [modulolinha], [ilin], [tipointervencao], [descricao], [ini], [fim], [fac])), Lower(?Filtro1))"
+                   }
+               ],
+    "itens":  [
+                  {
+                      "id":  "fMes",
+                      "tipo":  "filtro",
+                      "titulo":  "Mês/Ano",
+                      "fonte":  "relatorios",
+                      "argumento":  {
+                                        "campo":  "data",
+                                        "intervalo":  "mes",
+                                        "formato":  "mm/aaaa"
+                                    },
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "ordem":  "desc",
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  0,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "fTecnico",
+                      "tipo":  "filtro",
+                      "titulo":  "Técnico",
+                      "fonte":  "relatorios",
+                      "argumento":  "tecnico",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  5,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "fTipoDia",
+                      "tipo":  "filtro",
+                      "titulo":  "Tipo de dia",
+                      "fonte":  "relatorios",
+                      "argumento":  "diatipo",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  10,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "fDifDias",
+                      "tipo":  "filtro",
+                      "titulo":  "DifDiasTrb",
+                      "fonte":  "relatorios",
+                      "argumento":  "difdiastrb",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  15,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "fDataTempo",
+                      "tipo":  "filtro",
+                      "titulo":  "Data/Tempo",
+                      "fonte":  "relatorios",
+                      "argumento":  {
+                                        "campo":  "data",
+                                        "formato":  "dd/mm/aaaa"
+                                    },
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "tempo",
+                                    "agregacao":  "soma",
+                                    "formato":  "duracao",
+                                    "titulo":  "Tempo"
+                                },
+                      "ordem":  "valorDesc",
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  20,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "fCliente",
+                      "tipo":  "filtro",
+                      "titulo":  "Cliente",
+                      "fonte":  "relatorios",
+                      "argumento":  "cliente",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  25,
+                                     "w":  45,
+                                     "h":  5
+                                 },
+                      "transparente":  true,
+                      "letra":  12.75
+                  },
+                  {
+                      "id":  "kDias",
+                      "tipo":  "kpi",
+                      "titulo":  "Dias com Relatórios",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "campo":  "data",
+                                    "agregacao":  "contagemDistinta",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  30,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "letraValor":  27,
+                      "corValor":  "#000000"
+                  },
+                  {
+                      "id":  "kUteis",
+                      "tipo":  "kpi",
+                      "titulo":  "Dias Uteis no Mês",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "formula":  "maximo(diasuteismes) + 0 * unico(anomes)",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  15,
+                                     "y":  30,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "letraValor":  27,
+                      "corValor":  "#000000",
+                      "vazio":  ""
+                  },
+                  {
+                      "id":  "kTrabalho",
+                      "tipo":  "kpi",
+                      "titulo":  "Dias Trabalho com relatórios",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "campo":  "data",
+                                    "agregacao":  "contagemDistinta",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  30,
+                                     "y":  30,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "filtro":  "[diatipo] = \u0027DT\u0027",
+                      "letraValor":  27,
+                      "corValor":  "#000000",
+                      "marcador":  "#2196f3"
+                  },
+                  {
+                      "id":  "kMenos7",
+                      "tipo":  "kpi",
+                      "titulo":  "Dias com -7 Horas",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "campo":  "diatecnico",
+                                    "agregacao":  "contagemDistinta",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  45,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "filtro":  "[diatipo] = \u0027DT\u0027 And [tempodia] \u003c 25200",
+                      "letraValor":  27,
+                      "corValor":  "#000000",
+                      "filtrarAoClicar":  true,
+                      "marcador":  "#e57373"
+                  },
+                  {
+                      "id":  "kMais3",
+                      "tipo":  "kpi",
+                      "titulo":  "Relatórios +3 Dias Seg",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  15,
+                                     "y":  45,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "filtro":  "[diatipo] = \u0027DT\u0027 And [diascorridos] \u003e 3",
+                      "letraValor":  27,
+                      "corValor":  "#000000",
+                      "filtrarAoClicar":  true,
+                      "marcador":  "#ab47bc"
+                  },
+                  {
+                      "id":  "kDescanso",
+                      "tipo":  "kpi",
+                      "titulo":  "Dias Descanso com relatórios",
+                      "fonte":  "relatorios",
+                      "valor":  {
+                                    "campo":  "data",
+                                    "agregacao":  "contagemDistinta",
+                                    "formato":  "inteiro"
+                                },
+                      "alinhamento":  "center",
+                      "layout":  {
+                                     "x":  30,
+                                     "y":  45,
+                                     "w":  15,
+                                     "h":  15
+                                 },
+                      "filtro":  "[diatipo] = \u0027DD\u0027",
+                      "letraValor":  27,
+                      "corValor":  "#000000",
+                      "filtrarAoClicar":  true,
+                      "marcador":  "#ff9800"
+                  },
+                  {
+                      "id":  "tTipos",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "tipointervencao",
+                                          "titulo":  "Intervenção",
+                                          "largura":  156,
+                                          "alinhamento":  "right",
+                                          "valoresFixos":  [
+                                                               "Assistência Técnica (ATE)",
+                                                               "Assistência Contrato (ACT)",
+                                                               "Assistência TOC (ACO)",
+                                                               "Comercial (COM)",
+                                                               "Correção Erro (ERR)",
+                                                               "Formação (FOR)",
+                                                               "Interno (INT)",
+                                                               "Viagem (VIA)",
+                                                               "Faltas (FLT)",
+                                                               "Férias (FER)"
+                                                           ],
+                                          "soValoresFixos":  true,
+                                          "textoPorValor":  {
+                                                                "Férias (FER)":  "Dias ({Dias}) Férias (FER)"
+                                                            },
+                                          "rotuloTotal":  "Total"
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tempo",
+                                          "total":  "medida",
+                                          "largura":  66
+                                      },
+                                      {
+                                          "formula":  "soma(tempo) / 28800",
+                                          "titulo":  "Dias",
+                                          "formato":  "decimal2",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "filtroMestre":  true,
+                      "letra":  12,
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  67,
+                                     "w":  45,
+                                     "h":  41
+                                 },
+                      "grelhaVertical":  false,
+                      "espacoCelulas":  3,
+                      "cabecalho":  false,
+                      "alturaLinha":  18,
+                      "margemCelulas":  3.5,
+                      "corRodape":  "#B2EBF2",
+                      "celulasSeparadas":  true,
+                      "transparente":  true,
+                      "setas":  false,
+                      "barras":  false
+                  },
+                  {
+                      "id":  "tDias",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "data",
+                                          "titulo":  "Data",
+                                          "semRepetir":  true,
+                                          "largura":  92,
+                                          "rotuloTotal":  "**Média** {Média}"
+                                      },
+                                      {
+                                          "campo":  "diatipo",
+                                          "titulo":  "TD",
+                                          "semRepetir":  true,
+                                          "cores":  [
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DT",
+                                                            "cor":  "#2196f3",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DD",
+                                                            "cor":  "#ff8c00",
+                                                            "texto":  "branco"
+                                                        }
+                                                    ],
+                                          "largura":  37,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "tecnico",
+                                          "titulo":  "Técnico",
+                                          "largura":  140
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tempo",
+                                          "total":  true,
+                                          "largura":  88,
+                                          "cores":  [
+                                                        {
+                                                            "op":  "\u003c",
+                                                            "valor":  "07:00:00",
+                                                            "cor":  "#e57373",
+                                                            "texto":  "preto"
+                                                        }
+                                                    ],
+                                          "escala":  {
+                                                         "de":  "#f3f5fc",
+                                                         "ate":  "#4467d4"
+                                                     }
+                                      },
+                                      {
+                                          "formula":  "soma(tempo) / contagemDistinta(data) / contagemDistinta(tecnico)",
+                                          "titulo":  "Média",
+                                          "formato":  "duracao",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "desc":  true
+                                      }
+                                  ],
+                      "filtroMestre":  true,
+                      "letra":  12.75,
+                      "layout":  {
+                                     "x":  45,
+                                     "y":  0,
+                                     "w":  66,
+                                     "h":  60
+                                 },
+                      "grelhaVertical":  false,
+                      "alturaLinha":  28,
+                      "setas":  false,
+                      "barras":  false,
+                      "margemCelulas":  7,
+                      "alturaCabecalho":  28
+                  },
+                  {
+                      "id":  "tRelatorios",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "relnum",
+                                          "titulo":  "RNum",
+                                          "ligacao":  "https://app.goformz.com/forms/{relid}",
+                                          "largura":  58,
+                                          "rotuloTotal":  "**Relatórios** {Relatórios}",
+                                          "alinhamento":  "left"
+                                      },
+                                      {
+                                          "campo":  "relid",
+                                          "oculta":  true,
+                                          "largura":  1
+                                      },
+                                      {
+                                          "campo":  "modulo",
+                                          "titulo":  "Mod",
+                                          "cores":  [
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DM",
+                                                            "cor":  "#4dd0e1",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DMRP",
+                                                            "cor":  "#ffc107",
+                                                            "texto":  "preto"
+                                                        }
+                                                    ],
+                                          "largura":  56,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "tc",
+                                          "titulo":  "Tc",
+                                          "cores":  [
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "RS",
+                                                            "cor":  "#ab47bc",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "AD",
+                                                            "cor":  "#ff8c00",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "CP",
+                                                            "cor":  "#1565c0",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "SF",
+                                                            "cor":  "#2196f3",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "JR",
+                                                            "cor":  "#f44336",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "PC",
+                                                            "cor":  "#81c784",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "SV",
+                                                            "cor":  "#ffd54f",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "AS",
+                                                            "cor":  "#ffab91",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "VA",
+                                                            "cor":  "#f8c4b8",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "CC",
+                                                            "cor":  "#eef2c4",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "AL",
+                                                            "cor":  "#7cfc00",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "JT",
+                                                            "cor":  "#3fe8f0",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "CS",
+                                                            "cor":  "#b0b0b0",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DC",
+                                                            "cor":  "#ffff66",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "CB",
+                                                            "cor":  "#e1d5f0",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "BS",
+                                                            "cor":  "#e57373",
+                                                            "texto":  "branco"
+                                                        }
+                                                    ],
+                                          "largura":  40,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "cliente",
+                                          "titulo":  "Cliente",
+                                          "largura":  202
+                                      },
+                                      {
+                                          "campo":  "diatipo",
+                                          "titulo":  "TD",
+                                          "cores":  [
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DT",
+                                                            "cor":  "#2196f3",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DD",
+                                                            "cor":  "#ff8c00",
+                                                            "texto":  "branco"
+                                                        }
+                                                    ],
+                                          "largura":  40,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "data",
+                                          "titulo":  "Data",
+                                          "largura":  96
+                                      },
+                                      {
+                                          "campo":  "difdatas",
+                                          "titulo":  "Dif",
+                                          "largura":  34,
+                                          "alinhamento":  "center",
+                                          "cores":  [
+                                                        {
+                                                            "op":  "\u003c",
+                                                            "valor":  4,
+                                                            "cor":  "#81c784",
+                                                            "texto":  "branco"
+                                                        },
+                                                        {
+                                                            "op":  "\u003e",
+                                                            "valor":  3,
+                                                            "cor":  "#ab47bc",
+                                                            "texto":  "branco"
+                                                        }
+                                                    ]
+                                      },
+                                      {
+                                          "campo":  "datafecho",
+                                          "titulo":  "Data Fecho",
+                                          "largura":  96
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tempo",
+                                          "total":  true,
+                                          "largura":  80,
+                                          "escala":  {
+                                                         "de":  "#f3f5fc",
+                                                         "ate":  "#4467d4"
+                                                     }
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "agregacao":  "contagemDistinta",
+                                          "titulo":  "Relatórios",
+                                          "formato":  "inteiro",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "desc":  true
+                                      }
+                                  ],
+                      "filtroMestre":  true,
+                      "letra":  12.75,
+                      "layout":  {
+                                     "x":  111,
+                                     "y":  0,
+                                     "w":  129,
+                                     "h":  60
+                                 },
+                      "grelhaVertical":  false,
+                      "alturaLinha":  28,
+                      "setas":  false,
+                      "barras":  false,
+                      "margemCelulas":  7,
+                      "alturaCabecalho":  28
+                  },
+                  {
+                      "id":  "dAssunto",
+                      "tipo":  "detalhe",
+                      "fonte":  "relatorios",
+                      "titulo":  "",
+                      "colunas":  [
+                                      {
+                                          "campo":  "assunto",
+                                          "titulo":  "Assunto"
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "desc":  true
+                                      }
+                                  ],
+                      "chave":  "relnum",
+                      "letra":  11.5,
+                      "larguraRotulo":  80,
+                      "corRotulo":  "#F0E0B8",
+                      "linhasValor":  2,
+                      "letraRotulo":  13,
+                      "alinhamentoRotulo":  "center",
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  60,
+                                     "w":  240,
+                                     "h":  7
+                                 }
+                  },
+                  {
+                      "id":  "tLinhas",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "data",
+                                          "titulo":  "Data",
+                                          "semRepetir":  true,
+                                          "largura":  92
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "titulo":  "RelNum",
+                                          "semRepetir":  true,
+                                          "largura":  68,
+                                          "alinhamento":  "left"
+                                      },
+                                      {
+                                          "campo":  "linha",
+                                          "titulo":  "L",
+                                          "largura":  27,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "modulolinha",
+                                          "titulo":  "Mod",
+                                          "cores":  [
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DM",
+                                                            "cor":  "#4dd0e1",
+                                                            "texto":  "preto"
+                                                        },
+                                                        {
+                                                            "op":  "=",
+                                                            "valor":  "DMRP",
+                                                            "cor":  "#ffc107",
+                                                            "texto":  "preto"
+                                                        }
+                                                    ],
+                                          "largura":  58,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "ilin",
+                                          "titulo":  "Tipo",
+                                          "largura":  51
+                                      },
+                                      {
+                                          "campo":  "descricao",
+                                          "titulo":  "Descrição",
+                                          "largura":  514
+                                      },
+                                      {
+                                          "campo":  "ini",
+                                          "titulo":  "Ini",
+                                          "largura":  55
+                                      },
+                                      {
+                                          "campo":  "fim",
+                                          "titulo":  "Fim",
+                                          "largura":  55
+                                      },
+                                      {
+                                          "campo":  "fac",
+                                          "titulo":  "Fac",
+                                          "largura":  61
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tempo",
+                                          "total":  true,
+                                          "largura":  81,
+                                          "escala":  {
+                                                         "de":  "#f3f5fc",
+                                                         "ate":  "#4467d4"
+                                                     }
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "linha"
+                                      }
+                                  ],
+                      "letra":  12.75,
+                      "layout":  {
+                                     "x":  45,
+                                     "y":  67,
+                                     "w":  195,
+                                     "h":  41
+                                 },
+                      "grelhaVertical":  false,
+                      "alturaLinha":  28,
+                      "setas":  false,
+                      "barras":  false,
+                      "margemCelulas":  7,
+                      "alturaCabecalho":  28
+                  }
+              ]
+}
