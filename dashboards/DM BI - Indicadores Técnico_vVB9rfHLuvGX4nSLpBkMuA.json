@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
-                      "versao":  "0.26.327.1549",
-                      "programa":  "0.26.326.2129"
+                      "versao":  "0.26.327.2302",
+                      "programa":  "0.26.327.2230"
                   },
     "versao":  1,
     "tela":  {
@@ -320,6 +320,7 @@
                       "letraValor":  27,
                       "corValor":  "#000000",
                       "filtrarAoClicar":  true,
+                      "grupoFiltro":  "cartoes",
                       "marcador":  "#e57373"
                   },
                   {
@@ -343,6 +344,7 @@
                       "letraValor":  27,
                       "corValor":  "#000000",
                       "filtrarAoClicar":  true,
+                      "grupoFiltro":  "cartoes",
                       "marcador":  "#ab47bc"
                   },
                   {
@@ -366,6 +368,7 @@
                       "letraValor":  27,
                       "corValor":  "#000000",
                       "filtrarAoClicar":  true,
+                      "grupoFiltro":  "cartoes",
                       "marcador":  "#ff9800"
                   },
                   {
@@ -411,7 +414,7 @@
                                           "oculta":  true
                                       }
                                   ],
-                      "filtroMestre":  true,
+                      "filtroMestre":  "multiplo",
                       "letra":  12,
                       "layout":  {
                                      "x":  0,

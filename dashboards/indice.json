@@ -3,10 +3,10 @@
                        {
                            "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
                            "titulo":  "DM BI - Indicadores Técnico",
-                           "versao":  "0.26.327.1549",
+                           "versao":  "0.26.327.2302",
                            "ficheiro":  "DM BI - Indicadores Técnico_vVB9rfHLuvGX4nSLpBkMuA.json",
-                           "notas":  "Fundo mais claro e alaranjado (#F7F0E7)",
-                           "programa":  "0.26.326.2129"
+                           "notas":  "Totais e cartões de baixo com filtros cumulativos (várias escolhas somam-se)",
+                           "programa":  "0.26.327.2230"
                        }
                    ]
 }
