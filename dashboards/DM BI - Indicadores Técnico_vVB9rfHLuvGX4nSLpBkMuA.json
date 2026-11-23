@@ -1,7 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
-                      "versao":  "0.26.320.1828"
+                      "versao":  "0.26.327.1534",
+                      "programa":  "0.26.326.2129"
                   },
     "versao":  1,
     "tela":  {
@@ -12,7 +13,7 @@
                  "ajuste":  "janela"
              },
     "tema":  {
-                 "fundo":  "#D9D9D9",
+                 "fundo":  "#EDEAE3",
                  "blocos":  "#FFFFFF",
                  "cabecalho":  "#FFFFFF",
                  "texto":  "#202124",
