@@ -7,6 +7,14 @@
                            "ficheiro":  "DM BI - Indicadores Técnico_vVB9rfHLuvGX4nSLpBkMuA.json",
                            "notas":  "Datas e Filtro da barra alinhados com a tabela dos relatórios.",
                            "programa":  "0.26.329.1245"
+                       },
+                       {
+                           "codigo":  "QMLR-mfEIHksZl7n0UU_og",
+                           "titulo":  "DM BI - Relatórios",
+                           "versao":  "0.26.329.1820",
+                           "ficheiro":  "DM BI - Relatórios_QMLR-mfEIHksZl7n0UU_og.json",
+                           "notas":  "Página 1 do DM BI: relatórios, ficha do cliente e linhas.",
+                           "programa":  "0.26.329.1802"
                        }
                    ]
 }
