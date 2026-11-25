@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
-                      "versao":  "0.26.328.1212",
-                      "programa":  "0.26.327.2230"
+                      "versao":  "0.26.329.1455",
+                      "programa":  "0.26.329.1245"
                   },
     "versao":  1,
     "tela":  {
@@ -27,6 +27,7 @@
     "descricao":  "Página 2 do relatório DM BI do Looker Studio (convertida à mão). Fonte: vista materializada ltable.",
     "exportar":  false,
     "filtrosAtivos":  "blocos",
+    "alinharParametros":  "tRelatorios",
     "periodo":  {
                     "desde":  {
                                   "unidade":  "meses",
