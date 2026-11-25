@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "QMLR-mfEIHksZl7n0UU_og",
-                      "versao":  "0.26.329.1820",
-                      "programa":  "0.26.329.1802"
+                      "versao":  "0.26.329.1948",
+                      "programa":  "0.26.329.1938"
                   },
     "versao":  1,
     "tela":  {
@@ -27,6 +27,7 @@
     "descricao":  "Página 1 do relatório DM BI do Looker Studio (convertida à mão). Fonte: vista materializada ltable.",
     "exportar":  false,
     "filtrosAtivos":  "blocos",
+    "alinharParametros":  "tCab",
     "periodo":  {
                     "desde":  {
                                   "unidade":  "dias",
@@ -456,7 +457,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Tempo",
                                           "total":  true,
                                           "escala":  {
@@ -636,7 +637,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Tempo",
                                           "total":  true,
                                           "escala":  {

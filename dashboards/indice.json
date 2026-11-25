@@ -11,10 +11,10 @@
                        {
                            "codigo":  "QMLR-mfEIHksZl7n0UU_og",
                            "titulo":  "DM BI - Relatórios",
-                           "versao":  "0.26.329.1820",
+                           "versao":  "0.26.329.1948",
                            "ficheiro":  "DM BI - Relatórios_QMLR-mfEIHksZl7n0UU_og.json",
-                           "notas":  "Página 1 do DM BI: relatórios, ficha do cliente e linhas.",
-                           "programa":  "0.26.329.1802"
+                           "notas":  "Datas e Filtro alinhados com a tabela dos relatórios; Tempo em horas:minutos, como na página 2.",
+                           "programa":  "0.26.329.1938"
                        }
                    ]
 }
