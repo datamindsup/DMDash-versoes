@@ -15,6 +15,14 @@
                            "ficheiro":  "DM BI - Relatórios_QMLR-mfEIHksZl7n0UU_og.json",
                            "notas":  "Página 1: ficha do cliente como no Looker",
                            "programa":  "0.26.330.1213"
+                       },
+                       {
+                           "codigo":  "ZVQI4uU4FykH9N321GHMCg",
+                           "titulo":  "DM BI - Gráficos Técnico",
+                           "versao":  "0.26.330.1902",
+                           "ficheiro":  "DM BI - Gráficos Técnico_ZVQI4uU4FykH9N321GHMCg.json",
+                           "notas":  "Página 3: Gráficos Técnico",
+                           "programa":  "0.26.330.1854"
                        }
                    ]
 }
