@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "QMLR-mfEIHksZl7n0UU_og",
-                      "versao":  "0.26.329.1948",
-                      "programa":  "0.26.329.1938"
+                      "versao":  "0.26.330.1151",
+                      "programa":  "0.26.329.1954"
                   },
     "versao":  1,
     "tela":  {
@@ -562,7 +562,7 @@
                                   },
                       "totais":  false,
                       "letra":  10.5,
-                      "alturaLinha":  21,
+                      "alturaLinha":  25,
                       "alturaCabecalho":  20,
                       "corCabecalho":  "#EBDCB4",
                       "layout":  {
