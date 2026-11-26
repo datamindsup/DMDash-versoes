@@ -1,7 +1,7 @@
 {
     "dashboard":  {
                       "codigo":  "QMLR-mfEIHksZl7n0UU_og",
-                      "versao":  "0.26.330.1412",
+                      "versao":  "0.26.330.1422",
                       "programa":  "0.26.330.1213"
                   },
     "versao":  1,
@@ -502,7 +502,8 @@
                                       {
                                           "campo":  "clinum",
                                           "titulo":  "I",
-                                          "largura":  37
+                                          "largura":  34,
+                                          "alinhamento":  "left"
                                       },
                                       {
                                           "campo":  "cliente",
@@ -518,37 +519,39 @@
                                       {
                                           "campo":  "contratos",
                                           "titulo":  "Contrato",
-                                          "largura":  213,
+                                          "largura":  160,
                                           "vazio":  ""
                                       },
                                       {
                                           "campo":  "obscontrato",
                                           "titulo":  "Obs\u0026Alt",
-                                          "largura":  180,
+                                          "largura":  286,
                                           "vazio":  ""
                                       },
                                       {
                                           "campo":  "iniciocontrato",
                                           "titulo":  "Data Inicio",
-                                          "largura":  84,
+                                          "largura":  66,
                                           "vazio":  ""
                                       },
                                       {
                                           "campo":  "fimcontrato",
                                           "titulo":  "Data Fim",
-                                          "largura":  79,
+                                          "largura":  66,
                                           "vazio":  ""
                                       },
                                       {
                                           "campo":  "deslocacoescontrato",
                                           "titulo":  "NDesl",
-                                          "largura":  53,
+                                          "largura":  40,
+                                          "alinhamento":  "left",
                                           "vazio":  ""
                                       },
                                       {
                                           "campo":  "horascontrato",
                                           "titulo":  "NHoras",
-                                          "largura":  58,
+                                          "largura":  50,
+                                          "alinhamento":  "left",
                                           "vazio":  ""
                                       },
                                       {
@@ -562,7 +565,7 @@
                                   },
                       "totais":  false,
                       "letra":  10.5,
-                      "alturaLinha":  25,
+                      "alturaLinha":  24,
                       "alturaCabecalho":  20,
                       "corCabecalho":  "#EBDCB4",
                       "layout":  {
@@ -574,7 +577,7 @@
                       "grelhaVertical":  false,
                       "setas":  false,
                       "barras":  false,
-                      "margemCelulas":  7,
+                      "margemCelulas":  4,
                       "cabecalhoNegrito":  true
                   },
                   {
