@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "QMLR-mfEIHksZl7n0UU_og",
-                      "versao":  "0.26.330.1151",
-                      "programa":  "0.26.329.1954"
+                      "versao":  "0.26.330.1412",
+                      "programa":  "0.26.330.1213"
                   },
     "versao":  1,
     "tela":  {
@@ -27,7 +27,7 @@
     "descricao":  "Página 1 do relatório DM BI do Looker Studio (convertida à mão). Fonte: vista materializada ltable.",
     "exportar":  false,
     "filtrosAtivos":  "blocos",
-    "alinharParametros":  "tCab",
+    "alinharParametros":  555,
     "periodo":  {
                     "desde":  {
                                   "unidade":  "dias",
