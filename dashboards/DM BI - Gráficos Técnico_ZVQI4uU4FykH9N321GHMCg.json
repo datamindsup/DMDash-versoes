@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "ZVQI4uU4FykH9N321GHMCg",
-                      "versao":  "0.26.330.1902",
-                      "programa":  "0.26.330.1854"
+                      "versao":  "0.26.331.1451",
+                      "programa":  "0.26.330.1913"
                   },
     "versao":  1,
     "tela":  {
@@ -93,11 +93,12 @@
                                     "titulo":  "Σ Rel"
                                 },
                       "letra":  12.75,
+                      "transparente":  true,
                       "ordem":  "desc",
                       "layout":  {
-                                     "x":  96,
+                                     "x":  72,
                                      "y":  0,
-                                     "w":  47,
+                                     "w":  48,
                                      "h":  6
                                  }
                   },
@@ -116,8 +117,9 @@
                                     "titulo":  "Σ Rel"
                                 },
                       "letra":  12.75,
+                      "transparente":  true,
                       "layout":  {
-                                     "x":  144,
+                                     "x":  120,
                                      "y":  0,
                                      "w":  48,
                                      "h":  6
@@ -134,7 +136,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Assistência Técnica"
                                       }
                                   ],
@@ -166,7 +168,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Assistência Contrato"
                                       }
                                   ],
@@ -198,7 +200,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Assistência TOC"
                                       }
                                   ],
@@ -230,7 +232,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Comercial"
                                       }
                                   ],
@@ -262,7 +264,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Correção Erro"
                                       }
                                   ],
@@ -324,7 +326,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Formação"
                                       }
                                   ],
@@ -356,7 +358,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Interno"
                                       }
                                   ],
@@ -388,7 +390,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Viagem"
                                       }
                                   ],
@@ -420,7 +422,7 @@
                                       {
                                           "campo":  "tempo",
                                           "agregacao":  "soma",
-                                          "formato":  "duracao",
+                                          "formato":  "duracaoHM",
                                           "titulo":  "Faltas"
                                       }
                                   ],

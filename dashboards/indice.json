@@ -19,10 +19,10 @@
                        {
                            "codigo":  "ZVQI4uU4FykH9N321GHMCg",
                            "titulo":  "DM BI - Gráficos Técnico",
-                           "versao":  "0.26.330.1902",
+                           "versao":  "0.26.331.1451",
                            "ficheiro":  "DM BI - Gráficos Técnico_ZVQI4uU4FykH9N321GHMCg.json",
-                           "notas":  "Página 3: Gráficos Técnico",
-                           "programa":  "0.26.330.1854"
+                           "notas":  "Gráficos Técnico: as duas listas ao centro e inteiras, tempo sem os segundos, valores ao meio das barras e total mais pequeno no canto.",
+                           "programa":  "0.26.330.1913"
                        }
                    ]
 }
