@@ -19,10 +19,18 @@
                        {
                            "codigo":  "ZVQI4uU4FykH9N321GHMCg",
                            "titulo":  "DM BI - Gráficos Técnico",
-                           "versao":  "0.26.331.1451",
+                           "versao":  "0.26.332.1650",
                            "ficheiro":  "DM BI - Gráficos Técnico_ZVQI4uU4FykH9N321GHMCg.json",
-                           "notas":  "Gráficos Técnico: as duas listas ao centro e inteiras, tempo sem os segundos, valores ao meio das barras e total mais pequeno no canto.",
-                           "programa":  "0.26.330.1913"
+                           "notas":  "Gráficos Técnico sem o Filtro de texto; nova página Gráficos Ano (tempo por ano em cada tipo de intervenção).",
+                           "programa":  "0.26.332.1634"
+                       },
+                       {
+                           "codigo":  "PTI3M6z3tmWY1ftDZEpQBw",
+                           "titulo":  "DM BI - Gráficos Ano",
+                           "versao":  "0.26.332.1650",
+                           "ficheiro":  "DM BI - Gráficos Ano_PTI3M6z3tmWY1ftDZEpQBw.json",
+                           "notas":  "Gráficos Técnico sem o Filtro de texto; nova página Gráficos Ano (tempo por ano em cada tipo de intervenção).",
+                           "programa":  "0.26.332.1634"
                        }
                    ]
 }

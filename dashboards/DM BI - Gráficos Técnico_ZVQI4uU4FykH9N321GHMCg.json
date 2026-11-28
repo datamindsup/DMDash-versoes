@@ -1,8 +1,8 @@
 {
     "dashboard":  {
                       "codigo":  "ZVQI4uU4FykH9N321GHMCg",
-                      "versao":  "0.26.331.1451",
-                      "programa":  "0.26.330.1913"
+                      "versao":  "0.26.332.1650",
+                      "programa":  "0.26.332.1634"
                   },
     "versao":  1,
     "tela":  {
@@ -40,12 +40,6 @@
                 },
     "parametros":  [
                        {
-                           "nome":  "Filtro1",
-                           "titulo":  "Filtro",
-                           "tipo":  "texto",
-                           "valor":  ""
-                       },
-                       {
                            "nome":  "ParCli",
                            "titulo":  "N.º cliente (0 = todos)",
                            "tipo":  "numero",
@@ -63,14 +57,9 @@
                                        "relnum",
                                        "tecnico",
                                        "tc",
-                                       "cliente",
-                                       "assunto",
                                        "ilin",
-                                       "tipointervencao",
-                                       "descricao",
                                        "tempo"
-                                   ],
-                       "filtro":  "Contains(Lower(Concat([relnum], [cliente], [assunto], [tecnico], [tc], [ilin], [tipointervencao], [descricao])), Lower(?Filtro1))"
+                                   ]
                    }
                ],
     "itens":  [
