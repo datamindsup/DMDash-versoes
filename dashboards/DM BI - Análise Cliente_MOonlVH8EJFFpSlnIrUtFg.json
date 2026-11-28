@@ -1,0 +1,472 @@
+{
+    "dashboard":  {
+                      "codigo":  "MOonlVH8EJFFpSlnIrUtFg",
+                      "versao":  "0.26.332.1732",
+                      "programa":  "0.26.332.1723"
+                  },
+    "versao":  1,
+    "tela":  {
+                 "largura":  1200,
+                 "altura":  565,
+                 "grelha":  5,
+                 "margem":  2,
+                 "ajuste":  "janela"
+             },
+    "tema":  {
+                 "fundo":  "#E5EBF0",
+                 "blocos":  "#FFFFFF",
+                 "cabecalho":  "#FFFFFF",
+                 "texto":  "#202124",
+                 "borda":  "#E0E0E0",
+                 "sombra":  true,
+                 "raio":  4,
+                 "negrito":  false,
+                 "fonte":  "Roboto"
+             },
+    "titulo":  "DM BI - Análise Cliente",
+    "descricao":  "Página 5 do relatório DM BI do Looker Studio (convertida à mão). Fonte: vista materializada ltable.",
+    "exportar":  false,
+    "filtrosAtivos":  "blocos",
+    "alinharParametros":  555,
+    "periodo":  {
+                    "desde":  {
+                                  "unidade":  "anos",
+                                  "valor":  0
+                              },
+                    "ate":  {
+                                "unidade":  "dias",
+                                "valor":  0
+                            }
+                },
+    "parametros":  [
+                       {
+                           "nome":  "Filtro1",
+                           "titulo":  "Filtro",
+                           "tipo":  "texto",
+                           "valor":  ""
+                       },
+                       {
+                           "nome":  "ParCli",
+                           "titulo":  "N.º cliente (0 = todos)",
+                           "tipo":  "numero",
+                           "valor":  0,
+                           "oculto":  true
+                       }
+                   ],
+    "fontes":  [
+                   {
+                       "nome":  "relatorios",
+                       "sql":  "-- Fonte \"relatorios\" dos dashboards DM BI no DMDash (PostgreSQL/Supabase), a partir da vista materializada ltable.\n-- Uma linha por linha de relatório, como no Looker Studio. Os campos calculados do Looker estão aqui (ver DM-BI.md).\n-- Parâmetros do dashboard: @Desde, @Ate (datas da análise) e @ParCli (número; 0 = todos os clientes).\n-- O texto do \"Filtro\" (lin.filtro1…4) não vai no SQL: é o filtro de cada tabela, com o parâmetro ?Filtro.\nSELECT\n    l.\"lin.rdata\"::date                                   AS data,          -- dia do relatório (lin.rdata)\n    l.\"cab.relid\"                                         AS relid,         -- para a ligação ao GoFormz\n    l.\"cab.relnum\"                                        AS relnum,\n    l.\"lin.linnum\"                                        AS linha,\n    l.\"cab.relmodname\"                                    AS modulo,        -- Mod (DM, DMRP, …)\n    l.\"lin.relmodname\"                                    AS modulolinha,\n    l.\"cab.relstatus\"                                     AS estado,\n    l.\"cab.tecnico\"                                       AS tecnico,\n    CASE l.\"cab.tecnico\"\n        WHEN \u0027Sérgio Fernandes\u0027 THEN \u0027SF\u0027 WHEN \u0027Ricardo Stuart\u0027 THEN \u0027RS\u0027 WHEN \u0027José Rossas\u0027 THEN \u0027JR\u0027\n        WHEN \u0027José Augusto Dias\u0027 THEN \u0027AD\u0027 WHEN \u0027José António Lima\u0027 THEN \u0027JL\u0027 WHEN \u0027Pedro Costa\u0027 THEN \u0027PC\u0027\n        WHEN \u0027Sara Vilasboas\u0027 THEN \u0027SV\u0027 WHEN \u0027Andreia Sobral\u0027 THEN \u0027AS\u0027 WHEN \u0027Victor Afonso\u0027 THEN \u0027VF\u0027\n        WHEN \u0027Consultor\u0027 THEN \u0027CS\u0027 WHEN \u0027Consultor Contabilístico\u0027 THEN \u0027CC\u0027 WHEN \u0027Andreia Lima\u0027 THEN \u0027AL\u0027\n        WHEN \u0027Jorge Torres\u0027 THEN \u0027JT\u0027 WHEN \u0027Vera Alves\u0027 THEN \u0027VA\u0027 WHEN \u0027Domingos Costa\u0027 THEN \u0027DC\u0027\n        WHEN \u0027Carolina Pereira\u0027 THEN \u0027CP\u0027 WHEN \u0027Catarina Barros\u0027 THEN \u0027CB\u0027 WHEN \u0027Bruna Sampaio\u0027 THEN \u0027BS\u0027\n    END                                                   AS tc,            -- cab.tc\n    l.\"cab.tipo\"                                          AS tipo,\n    l.\"cab.classificacao\"                                 AS classificacao,\n    l.\"cab.clinum\"                                        AS clinum,\n    l.\"cab.clinome\"                                       AS cliente,\n    l.\"cab.assunto\"                                       AS assunto,\n    CASE WHEN l.\"cab.tday\" \u003e 5 THEN \u0027DD\u0027 ELSE \u0027DT\u0027 END    AS diatipo,       -- cab.diatipo (DD = descanso, DT = trabalho)\n    l.\"cab.cmdata\"::date                                  AS datafecho,     -- Data Fecho (completeddate)\n    CASE WHEN EXTRACT(DOW FROM l.\"cab.rdata\") \u003c 6         -- cab.difdatas (como no Looker: só o sábado dá 0)\n         THEN (l.\"cab.cmdata\"::date - l.\"cab.rdata\"::date)\n              - ROUND((l.\"cab.cmdata\"::date - l.\"cab.rdata\"::date) / 7.0) * 2\n         ELSE 0 END                                       AS difdatas,\n    l.\"cab.dwdays\"                                        AS diasfecho,     -- dias úteis até ao fecho (sem feriados)\n    l.\"cab.dsdays\"                                        AS diascorridos,  -- dias seguidos até ao fecho\n    CASE WHEN l.\"cab.dwdays\" \u003c 4 THEN \u0027Até 3 Dias\u0027 ELSE \u0027Mais de 3 Dias\u0027 END AS difdiastrb,  -- cab.dwdayso\n    l.\"cab.mwdays\"                                        AS diasuteismes,\n    EXTRACT(YEAR FROM l.\"lin.rdata\")::int * 100 + EXTRACT(MONTH FROM l.\"lin.rdata\")::int AS anomes, -- 202611 (tot.mwdays: só com um mês)\n    l.\"lin.rdata\"::date::text || \u0027 \u0027 || l.\"cab.tecnico\"   AS diatecnico,    -- dia + técnico (tot.tlintectmp, tot.mediadttp)\n    left(l.\"cab.totalhours\", length(l.\"cab.totalhours\") - 3) AS thours,     -- cab.thours (\"HH:MM\")\n    l.\"lin.intervencao\"                                   AS intervencao,   -- ASSISTENCIA_TEC, VIAGEM, FERIAS, …\n    CASE l.\"lin.intervencao\"                              -- lin.ilin (Tipo)\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN \u0027ATE\u0027 WHEN \u0027ASSISTENCIA_CON\u0027 THEN \u0027ACT\u0027 WHEN \u0027ASSISTENCIA_TOC\u0027 THEN \u0027ACO\u0027\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN \u0027ERR\u0027 WHEN \u0027VIAGEM\u0027 THEN \u0027VIA\u0027 WHEN \u0027FORMACAO\u0027 THEN \u0027FOR\u0027 WHEN \u0027COMERCIAL\u0027 THEN \u0027COM\u0027\n        WHEN \u0027INTERNO\u0027 THEN \u0027INT\u0027 WHEN \u0027FALTAS\u0027 THEN \u0027FLT\u0027 WHEN \u0027FERIAS\u0027 THEN \u0027FER\u0027 WHEN \u0027RGP - RGPD\u0027 THEN \u0027RGP\u0027\n        WHEN \u0027COMPLEMENTAR\u0027 THEN \u0027CMP\u0027 ELSE l.\"lin.intervencao\" END AS ilin,\n    CASE l.\"lin.intervencao\"                              -- nome com o código, pela ordem do Looker (ver ordemintervencao)\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN \u0027Assistência Técnica (ATE)\u0027 WHEN \u0027ASSISTENCIA_CON\u0027 THEN \u0027Assistência Contrato (ACT)\u0027\n        WHEN \u0027ASSISTENCIA_TOC\u0027 THEN \u0027Assistência TOC (ACO)\u0027 WHEN \u0027COMERCIAL\u0027 THEN \u0027Comercial (COM)\u0027\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN \u0027Correção Erro (ERR)\u0027 WHEN \u0027FORMACAO\u0027 THEN \u0027Formação (FOR)\u0027 WHEN \u0027INTERNO\u0027 THEN \u0027Interno (INT)\u0027\n        WHEN \u0027VIAGEM\u0027 THEN \u0027Viagem (VIA)\u0027 WHEN \u0027FALTAS\u0027 THEN \u0027Faltas (FLT)\u0027 WHEN \u0027FERIAS\u0027 THEN \u0027Férias (FER)\u0027\n        WHEN \u0027RGP - RGPD\u0027 THEN \u0027RGP - RGPD (RGP)\u0027 WHEN \u0027COMPLEMENTAR\u0027 THEN \u0027Complementar (CMP)\u0027 ELSE l.\"lin.intervencao\" END AS tipointervencao,\n    CASE l.\"lin.intervencao\"\n        WHEN \u0027ASSISTENCIA_TEC\u0027 THEN 1 WHEN \u0027ASSISTENCIA_CON\u0027 THEN 2 WHEN \u0027ASSISTENCIA_TOC\u0027 THEN 3 WHEN \u0027COMERCIAL\u0027 THEN 4\n        WHEN \u0027CORRECAO_ERRO\u0027 THEN 5 WHEN \u0027FORMACAO\u0027 THEN 6 WHEN \u0027INTERNO\u0027 THEN 7 WHEN \u0027VIAGEM\u0027 THEN 8 WHEN \u0027FALTAS\u0027 THEN 9\n        WHEN \u0027FERIAS\u0027 THEN 10 WHEN \u0027RGP - RGPD\u0027 THEN 11 WHEN \u0027COMPLEMENTAR\u0027 THEN 12 ELSE 99 END AS ordemintervencao,\n    l.\"lin.intlin\"                                        AS descricao,     -- lin.intlin (Descrição)\n    left(l.\"lin.hinilin\"::text, 5)                        AS ini,\n    left(l.\"lin.hfimlin\"::text, 5)                        AS fim,           -- lin.fim\n    l.\"lin.faclin\"                                        AS fac,\n    substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60  AS tempo,         -- lin.tlin: segundos da linha (formato \"duracao\")\n    CASE WHEN l.\"lin.intervencao\" = \u0027ASSISTENCIA_CON\u0027 THEN substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60 END AS tempoact,   -- lin.tlinact (só ACT)\n    CASE WHEN l.\"lin.intervencao\" = \u0027ASSISTENCIA_TEC\u0027 THEN substring(l.\"lin.htotlin\"::text, 1, 2)::int * 3600\n      + substring(l.\"lin.htotlin\"::text, 4, 2)::int * 60 END AS tempoate,   -- lin.tlinate (só ATE)\n    CASE WHEN l.\"lin.intervencao\" = \u0027VIAGEM\u0027 THEN l.\"cab.rdata\"::date END AS dataviagem, -- tot.cddesloca2 (contar = dias com viagem)\n    CASE WHEN l.\"lin.intervencao\" = \u0027VIAGEM\u0027\n         THEN l.\"cab.rdata\"::date::text || \u0027 \u0027 || l.\"cab.clinum\" END AS deslocacao,  -- tot.cddesloca (contar = deslocações dia+cliente)\n    l.\"cli.clinhorascontrato\"                             AS horascontrato, -- para lin.tlinactper (% das horas do contrato); NHoras\n    l.\"cli.clitelefone\"                                   AS telefone,      -- ficha do cliente (página 1)\n    l.\"cli.clicontratos\"                                  AS contratos,\n    l.\"cli.cliobsaltcontrato\"                             AS obscontrato,   -- Obs\u0026Alt\n    l.\"cli.clidatainicontrato\"                            AS iniciocontrato,\n    l.\"cli.clidatafimcontrato\"                            AS fimcontrato,\n    l.\"cli.clindeslocacontrato\"                           AS deslocacoescontrato,\n    l.\"tot.tdtotal\"                                       AS tempodia,      -- total do técnico nesse dia, em segundos\n    to_char(l.\"lin.rdata\"::date, \u0027YYYYMMDD\u0027)::bigint * 1000000\n      + l.\"cab.relnum\"::bigint                            AS recente        -- dia + RelNum: o máximo é o relatório mais recente (Assunto)\nFROM ltable AS l\nWHERE l.\"lin.rdata\"::date BETWEEN @Desde AND @Ate\n  AND (@ParCli = 0 OR l.\"cab.clinum\" = @ParCli)                             -- cab.clinum.filtrourl",
+                       "soColunasUsadas":  true,
+                       "colunas":  [
+                                       "data",
+                                       "relnum",
+                                       "linha",
+                                       "modulolinha",
+                                       "tecnico",
+                                       "clinum",
+                                       "cliente",
+                                       "assunto",
+                                       "ilin",
+                                       "descricao",
+                                       "ini",
+                                       "fim",
+                                       "fac",
+                                       "tempo",
+                                       "telefone",
+                                       "contratos",
+                                       "obscontrato",
+                                       "iniciocontrato",
+                                       "fimcontrato",
+                                       "horascontrato",
+                                       "deslocacoescontrato"
+                                   ],
+                       "filtro":  "Contains(Lower(Concat([relnum], [cliente], [assunto], [tecnico], [modulolinha], [ilin], [descricao], [ini], [fim], [fac])), Lower(?Filtro1))"
+                   }
+               ],
+    "itens":  [
+                  {
+                      "id":  "fMes",
+                      "tipo":  "filtro",
+                      "titulo":  "Mês/Ano",
+                      "fonte":  "relatorios",
+                      "argumento":  {
+                                        "campo":  "data",
+                                        "intervalo":  "mes",
+                                        "formato":  "mm/aaaa"
+                                    },
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "letra":  12.75,
+                      "transparente":  true,
+                      "ordem":  "desc",
+                      "layout":  {
+                                     "x":  48,
+                                     "y":  0,
+                                     "w":  48,
+                                     "h":  6
+                                 }
+                  },
+                  {
+                      "id":  "fTecnico",
+                      "tipo":  "filtro",
+                      "titulo":  "Técnico",
+                      "fonte":  "relatorios",
+                      "argumento":  "tecnico",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "letra":  12.75,
+                      "transparente":  true,
+                      "layout":  {
+                                     "x":  96,
+                                     "y":  0,
+                                     "w":  48,
+                                     "h":  6
+                                 }
+                  },
+                  {
+                      "id":  "fCliente",
+                      "tipo":  "filtro",
+                      "titulo":  "Cliente",
+                      "fonte":  "relatorios",
+                      "argumento":  "cliente",
+                      "modo":  "combo",
+                      "multipla":  true,
+                      "botaoComTitulo":  true,
+                      "valor":  {
+                                    "campo":  "relnum",
+                                    "agregacao":  "contagemDistinta",
+                                    "titulo":  "Σ Rel"
+                                },
+                      "letra":  12.75,
+                      "transparente":  true,
+                      "layout":  {
+                                     "x":  144,
+                                     "y":  0,
+                                     "w":  48,
+                                     "h":  6
+                                 }
+                  },
+                  {
+                      "id":  "gMes",
+                      "tipo":  "grafico",
+                      "subtipo":  "barrasHorizontais",
+                      "titulo":  "",
+                      "fonte":  "relatorios",
+                      "argumento":  {
+                                        "campo":  "data",
+                                        "intervalo":  "mes",
+                                        "formato":  "mm/aaaa"
+                                    },
+                      "valores":  [
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Mês/Ano"
+                                      }
+                                  ],
+                      "ordenar":  "argumento",
+                      "cor":  "#00838F",
+                      "legenda":  true,
+                      "rotulos":  true,
+                      "eixoValores":  false,
+                      "barrasLargas":  true,
+                      "filtroMestre":  true,
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  6,
+                                     "w":  45,
+                                     "h":  58
+                                 }
+                  },
+                  {
+                      "id":  "gTipo",
+                      "tipo":  "grafico",
+                      "subtipo":  "barrasHorizontais",
+                      "titulo":  "",
+                      "fonte":  "relatorios",
+                      "argumento":  "ilin",
+                      "valores":  [
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tipo"
+                                      }
+                                  ],
+                      "ordenar":  "valor",
+                      "cor":  "#00838F",
+                      "legenda":  true,
+                      "rotulos":  true,
+                      "eixoValores":  false,
+                      "barrasLargas":  true,
+                      "filtroMestre":  true,
+                      "top":  12,
+                      "total":  true,
+                      "layout":  {
+                                     "x":  0,
+                                     "y":  64,
+                                     "w":  45,
+                                     "h":  49
+                                 }
+                  },
+                  {
+                      "id":  "tRelatorios",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "data",
+                                          "titulo":  "Data",
+                                          "largura":  85,
+                                          "semRepetir":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "titulo":  "RelNum",
+                                          "largura":  70,
+                                          "alinhamento":  "left"
+                                      },
+                                      {
+                                          "campo":  "tecnico",
+                                          "titulo":  "Técnico",
+                                          "largura":  130
+                                      },
+                                      {
+                                          "campo":  "assunto",
+                                          "titulo":  "Assunto",
+                                          "largura":  690,
+                                          "vazio":  "-"
+                                      },
+                                      {
+                                          "agregacao":  "contagem",
+                                          "titulo":  "Linhas",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "desc":  true
+                                      }
+                                  ],
+                      "filtroMestre":  true,
+                      "totais":  false,
+                      "letra":  12.75,
+                      "alturaLinha":  30,
+                      "alturaCabecalho":  30,
+                      "layout":  {
+                                     "x":  45,
+                                     "y":  6,
+                                     "w":  195,
+                                     "h":  45
+                                 },
+                      "grelhaVertical":  false,
+                      "setas":  false,
+                      "barras":  false,
+                      "margemCelulas":  7
+                  },
+                  {
+                      "id":  "tCliente",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "clinum",
+                                          "titulo":  "I",
+                                          "largura":  34,
+                                          "alinhamento":  "left"
+                                      },
+                                      {
+                                          "campo":  "cliente",
+                                          "titulo":  "Nome",
+                                          "largura":  207
+                                      },
+                                      {
+                                          "campo":  "telefone",
+                                          "titulo":  "Telefone",
+                                          "largura":  76,
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "contratos",
+                                          "titulo":  "Contrato",
+                                          "largura":  160,
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "obscontrato",
+                                          "titulo":  "Obs\u0026Alt",
+                                          "largura":  276,
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "iniciocontrato",
+                                          "titulo":  "Data Inicio",
+                                          "largura":  66,
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "fimcontrato",
+                                          "titulo":  "Data Fim",
+                                          "largura":  66,
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "deslocacoescontrato",
+                                          "titulo":  "NDesl",
+                                          "largura":  40,
+                                          "alinhamento":  "left",
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "campo":  "horascontrato",
+                                          "titulo":  "NHoras",
+                                          "largura":  50,
+                                          "alinhamento":  "left",
+                                          "vazio":  ""
+                                      },
+                                      {
+                                          "agregacao":  "contagem",
+                                          "titulo":  "Linhas",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "ordenar":  {
+                                      "campo":  "clinum"
+                                  },
+                      "totais":  false,
+                      "cabecalhoNegrito":  true,
+                      "margemCelulas":  4,
+                      "letra":  10.5,
+                      "alturaLinha":  24,
+                      "alturaCabecalho":  20,
+                      "corCabecalho":  "#EBDCB4",
+                      "layout":  {
+                                     "x":  45,
+                                     "y":  51,
+                                     "w":  195,
+                                     "h":  10
+                                 },
+                      "grelhaVertical":  false,
+                      "setas":  false,
+                      "barras":  false
+                  },
+                  {
+                      "id":  "tLinhas",
+                      "tipo":  "tabela",
+                      "fonte":  "relatorios",
+                      "colunas":  [
+                                      {
+                                          "campo":  "data",
+                                          "titulo":  "Data",
+                                          "largura":  85,
+                                          "semRepetir":  true
+                                      },
+                                      {
+                                          "campo":  "modulolinha",
+                                          "titulo":  "Mod",
+                                          "largura":  52,
+                                          "rotuloTotal":  "**Relatórios** {Relatórios}"
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "titulo":  "RelNum",
+                                          "largura":  67,
+                                          "semRepetir":  true,
+                                          "alinhamento":  "left"
+                                      },
+                                      {
+                                          "campo":  "linha",
+                                          "titulo":  "L",
+                                          "largura":  30,
+                                          "alinhamento":  "center"
+                                      },
+                                      {
+                                          "campo":  "ilin",
+                                          "titulo":  "Tipo",
+                                          "largura":  50
+                                      },
+                                      {
+                                          "campo":  "descricao",
+                                          "titulo":  "Descrição",
+                                          "largura":  450
+                                      },
+                                      {
+                                          "campo":  "ini",
+                                          "titulo":  "Ini",
+                                          "largura":  50
+                                      },
+                                      {
+                                          "campo":  "fim",
+                                          "titulo":  "Fim",
+                                          "largura":  50
+                                      },
+                                      {
+                                          "campo":  "fac",
+                                          "titulo":  "Fatura?",
+                                          "largura":  62
+                                      },
+                                      {
+                                          "campo":  "tempo",
+                                          "agregacao":  "soma",
+                                          "formato":  "duracaoHM",
+                                          "titulo":  "Tempo",
+                                          "total":  "medida",
+                                          "largura":  79,
+                                          "alinhamento":  "right"
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "agregacao":  "contagemDistinta",
+                                          "titulo":  "Relatórios",
+                                          "formato":  "inteiro",
+                                          "oculta":  true
+                                      }
+                                  ],
+                      "ordenar":  [
+                                      {
+                                          "campo":  "data",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "relnum",
+                                          "desc":  true
+                                      },
+                                      {
+                                          "campo":  "linha"
+                                      }
+                                  ],
+                      "letra":  12.75,
+                      "alturaLinha":  30,
+                      "alturaCabecalho":  30,
+                      "layout":  {
+                                     "x":  45,
+                                     "y":  61,
+                                     "w":  195,
+                                     "h":  52
+                                 },
+                      "grelhaVertical":  false,
+                      "setas":  false,
+                      "barras":  false,
+                      "margemCelulas":  7
+                  }
+              ]
+}

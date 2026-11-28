@@ -35,6 +35,15 @@
                            "notas":  "Gráficos Técnico sem o Filtro de texto; nova página Gráficos Ano (tempo por ano em cada tipo de intervenção).",
                            "programa":  "0.26.332.1634",
                            "ordem":  4
+                       },
+                       {
+                           "codigo":  "MOonlVH8EJFFpSlnIrUtFg",
+                           "titulo":  "DM BI - Análise Cliente",
+                           "versao":  "0.26.332.1732",
+                           "ficheiro":  "DM BI - Análise Cliente_MOonlVH8EJFFpSlnIrUtFg.json",
+                           "notas":  "Nova página Análise Cliente (tempo por mês e por tipo, relatórios, ficha do cliente e linhas).",
+                           "programa":  "0.26.332.1723",
+                           "ordem":  5
                        }
                    ]
 }
