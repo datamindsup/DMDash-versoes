@@ -1,20 +1,22 @@
 {
     "dashboards":  [
                        {
-                           "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
-                           "titulo":  "DM BI - Indicadores Técnico",
-                           "versao":  "0.26.329.1455",
-                           "ficheiro":  "DM BI - Indicadores Técnico_vVB9rfHLuvGX4nSLpBkMuA.json",
-                           "notas":  "Datas e Filtro da barra alinhados com a tabela dos relatórios.",
-                           "programa":  "0.26.329.1245"
-                       },
-                       {
                            "codigo":  "QMLR-mfEIHksZl7n0UU_og",
                            "titulo":  "DM BI - Relatórios",
                            "versao":  "0.26.330.1422",
                            "ficheiro":  "DM BI - Relatórios_QMLR-mfEIHksZl7n0UU_og.json",
                            "notas":  "Página 1: ficha do cliente como no Looker",
-                           "programa":  "0.26.330.1213"
+                           "programa":  "0.26.330.1213",
+                           "ordem":  1
+                       },
+                       {
+                           "codigo":  "vVB9rfHLuvGX4nSLpBkMuA",
+                           "titulo":  "DM BI - Indicadores Técnico",
+                           "versao":  "0.26.329.1455",
+                           "ficheiro":  "DM BI - Indicadores Técnico_vVB9rfHLuvGX4nSLpBkMuA.json",
+                           "notas":  "Datas e Filtro da barra alinhados com a tabela dos relatórios.",
+                           "programa":  "0.26.329.1245",
+                           "ordem":  2
                        },
                        {
                            "codigo":  "ZVQI4uU4FykH9N321GHMCg",
@@ -22,7 +24,8 @@
                            "versao":  "0.26.332.1650",
                            "ficheiro":  "DM BI - Gráficos Técnico_ZVQI4uU4FykH9N321GHMCg.json",
                            "notas":  "Gráficos Técnico sem o Filtro de texto; nova página Gráficos Ano (tempo por ano em cada tipo de intervenção).",
-                           "programa":  "0.26.332.1634"
+                           "programa":  "0.26.332.1634",
+                           "ordem":  3
                        },
                        {
                            "codigo":  "PTI3M6z3tmWY1ftDZEpQBw",
@@ -30,7 +33,8 @@
                            "versao":  "0.26.332.1650",
                            "ficheiro":  "DM BI - Gráficos Ano_PTI3M6z3tmWY1ftDZEpQBw.json",
                            "notas":  "Gráficos Técnico sem o Filtro de texto; nova página Gráficos Ano (tempo por ano em cada tipo de intervenção).",
-                           "programa":  "0.26.332.1634"
+                           "programa":  "0.26.332.1634",
+                           "ordem":  4
                        }
                    ]
 }
